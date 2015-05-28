@@ -53,8 +53,8 @@ public:
     // Called to zero the timer and start the counters
     inline void start() {
         currentTime_ = Clock::now();
-        baseTime_ = d_currentTime;
-        prevTime_ = d_currentTime;
+        baseTime_ = currentTime_;
+        prevTime_ = currentTime_;
         pauseTotal_ = std::chrono::nanoseconds::zero();
         paused_ = false;
     }
