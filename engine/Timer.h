@@ -1,5 +1,5 @@
-#ifndef _CTIMER_
-#define _CTIMER_
+#ifndef _TIMER_
+#define _TIMER_
 
 #include <chrono>
 
@@ -12,17 +12,17 @@ private:
 
     bool paused_;
 
-    Clock::time_point	baseTime_,		// The base time of the timer.
-                        pauseTime_,	// The time marker when the timer was paused
-                        prevTime_,		// The time during the last time step
-                        currentTime_;
+    Clock::time_point	base_time_,		// The base time of the timer.
+                        pause_time_,	// The time marker when the timer was paused
+                        prev_time_,		// The time during the last time step
+                        current_time_;
 
-    std::chrono::nanoseconds pauseTotal_;	// The total time the timer was paused
-    std::chrono::nanoseconds deltaTime_;	// The delta seconds between ticks
+    std::chrono::nanoseconds pause_total_;	// The total time the timer was paused
+    std::chrono::nanoseconds delta_time_;	// The delta seconds between ticks
 
 public:
     // Constructor
-    C_Timer() : paused_(false), pauseTotal_(std::chrono::nanoseconds::zero()) {}
+    C_Timer() : paused_(false), pause_total_(std::chrono::nanoseconds::zero()) {}
     ~C_Timer() {}
 
     // Gets time in seconds since Reset() was called
@@ -32,30 +32,30 @@ public:
         // -----*----------------*--------------*----------> Time
         //	d_baseTime		d_pauseTime	    d_currentTime
         if (paused_)
-            return (double)(pauseTime_ - baseTime_).count()/COUNTSPERSECOND;
+            return (double)(pause_time_ - base_time_).count()/COUNTSPERSECOND;
 
         // The (d_currentTime - d_baseTime) includes any paused time
         // So need to subract that out
-        //						 |<---d_pauseTotal-->|
+        //						 |<---pause_total--->|
         // -----*----------------*-------------------*----------------*----> Time
-        //	d_baseTime		d_pauseTime	           start()        d_currentTime
+        //	base_time		pause_time	           start()       current_time
         else {
-            currentTime_ = Clock::now();
-            return (double)(currentTime_ - baseTime_ - pauseTotal_).count()/COUNTSPERSECOND;
+            current_time_ = Clock::now();
+            return (double)(current_time_ - base_time_ - pause_total_).count()/COUNTSPERSECOND;
         }
     }
 
     // Gets the time in seconds since last tick()
     inline double getDeltaTime() {
-        return (double)deltaTime_.count()/COUNTSPERSECOND;
+        return (double)delta_time_.count()/COUNTSPERSECOND;
     }
 
     // Called to zero the timer and start the counters
     inline void start() {
-        currentTime_ = Clock::now();
-        baseTime_ = currentTime_;
-        prevTime_ = currentTime_;
-        pauseTotal_ = std::chrono::nanoseconds::zero();
+        current_time_ = Clock::now();
+        base_time_ = current_time_;
+        prev_time_ = current_time_;
+        pause_total_ = std::chrono::nanoseconds::zero();
         paused_ = false;
     }
 
@@ -64,7 +64,7 @@ public:
         // If its already paused, don't do anything
         if (paused_) return;
         // Save the time we stopped at
-        pauseTime_ = Clock::now();
+        pause_time_ = Clock::now();
         paused_ = true;
     }
     
@@ -76,11 +76,11 @@ public:
         //				|<--d_pauseTotal--->|
         // -------------*-------------------*--------------> Time
         //			d_pauseTime			 start()
-        currentTime_ = Clock::now();
-        pauseTotal_ += (currentTime_ - pauseTime_);
+        current_time_ = Clock::now();
+        pause_total_ += (current_time_ - pause_time_);
         
         // Reset the previous time
-        prevTime_ = currentTime_;
+        prev_time_ = current_time_;
         paused_ = false;
     }
 
@@ -94,12 +94,12 @@ public:
         //				|<----d_deltaTime----->|
         // -------------*----------------------*--------------> Time
         //			d_iPrevTime			      Tick()
-        currentTime_ = Clock::now();
-        deltaTime_ = currentTime_ - prevTime_;
-        prevTime_ = currentTime_;
+        current_time_ = Clock::now();
+        delta_time_ = current_time_ - prev_time_;
+        prev_time_ = current_time_;
     }
 };
 
 }  // engine namespace
 
-#endif // _CTIME_
+#endif // _TIMER_
