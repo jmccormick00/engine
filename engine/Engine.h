@@ -82,7 +82,7 @@ public:
 
 	inline virtual void onRender(const double& deltaT) {
 		for (auto& sys : render_list_)
-			sys->onUpdate(deltaT);
+			sys->onRender();
 	}
 
 	virtual void exit() = 0;
