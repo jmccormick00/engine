@@ -71,7 +71,7 @@ bool Engine::addWildCardListener(MsgListenerPtr l) {
 	ListenerList::iterator i = std::find(wildcard_listener_list_.begin(), wildcard_listener_list_.end(), l);
 
 	// This listener is already in the list
-	if (i == wildcard_listener_list_.end())
+	if (i != wildcard_listener_list_.end())
 		return false;
 
 	// Add it to the list.
