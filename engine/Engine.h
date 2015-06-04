@@ -98,6 +98,7 @@ typedef std::shared_ptr<EngineState> EngineStatePtr;
 typedef unsigned int MessageType;
 class Message {
 private:
+    Message();
 	const double time_stamp_;
 	const MessageType message_type_;
 
@@ -230,6 +231,8 @@ public:
 	void deleteWildCardListener(MsgListenerPtr l) {
 		wildcard_listener_list_.remove(l);
 	}
+    
+    // The order of the listeners is not considered
 	bool addListener(MsgListenerPtr l, const MessageType& type);
 
 	bool deleteListener(MsgListenerPtr l, const MessageType& type) {

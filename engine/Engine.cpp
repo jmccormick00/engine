@@ -62,6 +62,7 @@ bool Engine::addListener(MsgListenerPtr l, const MessageType& type) {
 // addWildCardListener - Public Engine
 // Description 
 //		Adds a listener as a wild card.
+//      These listeners receive every message every tick
 //
 // Arguments:	MsgListenerPtr - A pointer to a message listener
 // Returns:		true if successful, false otherwise
@@ -148,7 +149,8 @@ Engine::MsgStatus Engine::queueMessage(MessagePtr msg) {
 //-----------------------------------------------------------------------
 void Engine::dispatchMessages() {
 	// flip the current queue so that during message processing more msgs can be sent.
-	bool queue_to_process = current_msg_queue_;
+    static bool queue_to_process;
+    queue_to_process = current_msg_queue_;
 	current_msg_queue_ = !current_msg_queue_;
 	message_queue_[current_msg_queue_].clear();
 
