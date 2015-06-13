@@ -174,6 +174,9 @@ void Engine::dispatchMessages() {
 // Returns:		None.
 //-----------------------------------------------------------------------
 void Engine::tick() {
+    
+    static EngineStatePtr current_state;
+    
 	// First - Update the timer 
 	timer_.tick();
 	current_timestamp_ = timer_.getTime(); 
@@ -193,7 +196,7 @@ void Engine::tick() {
 		queued_state_ = 0;
 	}
 
-	static EngineStatePtr current_state = state_.front();
+    current_state = state_.front();
 
 	// Fourth - Perform the updates
     if(current_state)
