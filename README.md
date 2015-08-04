@@ -1,6 +1,2 @@
 # engine
-Features:
--Swapable systems
--State changes
--Message Passing
--Timing mechanism
+Features: Swapable systems, State changes, Message Passing, Timing mechanism
